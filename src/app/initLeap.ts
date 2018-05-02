@@ -3,9 +3,10 @@ import * as Leap from 'leapjs';
 
 export let initLeap = (cb) => {
     
-    let controllerOptions = {} //not sure if this is just needed as a param for the Leap.loop?
-
+    let controllerOptions = {background: true} //not sure if this is just needed as a param for the Leap.loop?
+    let name = "leapMotion"
     let leapOutputData = {}
+    leapOutputData[name] = {}
 
     let fingerTypeToString = (type: number): string => {
         switch(type) {
@@ -28,9 +29,9 @@ export let initLeap = (cb) => {
         let tipPosition = finger.tipPosition;
         let key = handType + '.' + fingerTypeToString(finger.type)
 
-        leapOutputData[key + '.x'] = tipPosition[0] 
-        leapOutputData[key + '.y'] = tipPosition[1] 
-        leapOutputData[key + '.z'] = tipPosition[2] 
+        leapOutputData[name][key + '.x'] = tipPosition[0] 
+        leapOutputData[name][key + '.y'] = tipPosition[1] 
+        leapOutputData[name][key + '.z'] = tipPosition[2] 
 
 
     }
@@ -47,8 +48,8 @@ export let initLeap = (cb) => {
             
         });
 
-        console.log("updated finger data is", leapOutputData)
-        cb(leapOutputData);
+        //console.log("updated finger data is", leapOutputData)
+        cb(leapOutputData, name);
     })
     
 }

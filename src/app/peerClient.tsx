@@ -3,7 +3,9 @@ import Peer = require('peerjs');
 import * as React from 'react';
 import {initLeap} from './initLeap';
 
-
+type Data = {
+    [name: string] : KVPData
+}
 type KVPData = {
     [key: string] : number
 }
@@ -78,11 +80,13 @@ export default class PeerClient extends React.Component <any, PeerClientState>{
     }
     */
 
-    updateContent = (message: KVPData): JSX.Element => {
+    updateContent = (message: Data): JSX.Element => {
+        let tmpKey = Object.keys(message)[0];  //temporary key for leap motion app
         let content = [];
-        for (let key in message) {
-            content.push( key + ': ' + message[key].toString())
+        for (let key in message[tmpKey]) {
+            content.push( key + ': ' + message[tmpKey][key].toString())
         }
+        
 
         return (
             <div>
@@ -92,9 +96,10 @@ export default class PeerClient extends React.Component <any, PeerClientState>{
                 }
             </div>
         )
+        
     }
     
-    sendToRemote = (message: KVPData) => {
+    sendToRemote = (message: Data): void => {
         //console.log("connections list is", this.connections);
         this.setState({
             content: this.updateContent(message)
